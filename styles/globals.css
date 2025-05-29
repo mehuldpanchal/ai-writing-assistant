@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-black;
+}
+/* Glowing blue light behind card */
+.glow-behind {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90vw;
+  max-width: 700px;
+  height: 50vw;
+  max-height: 480px;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 40px;
+  background: radial-gradient(ellipse at center, #3b82f6 0%, #1e3a8a 60%, transparent 100%);
+  filter: blur(90px) brightness(1.5);
+  opacity: 0.7;
+  animation: glowPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  0% { opacity: 0.7; filter: blur(64px) brightness(1.5);}
+  100% { opacity: 1; filter: blur(80px) brightness(2);}
+}
+
+/* Modern glassmorphism effect */
+.glassmorphism {
+  background: rgba(30, 41, 59, 0.85); /* slate-800 with opacity */
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border-radius: 1.25rem;
+  border: 1px solid rgba(59, 130, 246, 0.18); /* subtle blue border */
+  box-shadow: 0 8px 40px 0 rgba(16, 37, 89, 0.18);
+}
+
+/* Modern text effects */
+.neon-text {
+  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+
+/* Text display areas */
+.text-display {
+  @apply p-6 bg-gray-900/50 rounded-xl backdrop-blur-sm border border-gray-800 shadow-lg;
+}
+
+/* Loading animation */
+.loader-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.morphing-blob {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  animation: morph 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.5));
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+@keyframes morph {
+  0%, 100% {
+    border-radius: 40% 60% 70% 30% / 60% 40% 60% 40%;
+    transform: scale(1);
+  }
+  50% {
+    border-radius: 60% 40% 30% 70% / 40% 60% 40% 60%;
+    transform: scale(1.05);
+  }
+}
+
+/* Underline corrected words */
+.underline {
+  text-decoration: underline wavy #ec4899;
+  text-underline-offset: 0.25em;
+}
