@@ -23,7 +23,13 @@ export default function BottomNav() {
       const userId = getUserId();
       const headers = { 'X-User-ID': userId };
       
-      const res = await fetch('/api/spelling-grammar', { method: 'GET', headers });
+      // Try spelling-grammar endpoint first
+      let res = await fetch('/api/spelling-grammar', { method: 'GET', headers });
+      if (!res.ok) {
+        // Fallback to writing-style endpoint if spelling-grammar fails
+        res = await fetch('/api/writing-style', { method: 'GET', headers });
+      }
+      
       const data = await res.json();
 
       console.log('Fetched credits:', {
@@ -41,15 +47,10 @@ export default function BottomNav() {
     }
   };
 
-  // Listen for credit updates from other components
-  useEffect(() => {
-    const handleCreditUpdate = (e) => {
-      console.log('Received creditUpdate event', e.detail);
-      fetchCredits();
-    };
-    window.addEventListener('creditUpdate', handleCreditUpdate);
-    return () => window.removeEventListener('creditUpdate', handleCreditUpdate);
-  }, []);
+  // Manual credit refresh after operations
+  const refreshCredits = () => {
+    fetchCredits();
+  };
 
   useEffect(() => {
     fetchCredits();

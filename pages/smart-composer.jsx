@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaMagic } from "react-icons/fa";
 import { motion } from "framer-motion";
 import BottomNav from "../components/ui/BottomNav";
@@ -21,6 +21,8 @@ export default function SmartComposer() {
   const [response, setResponse] = useState("");
   const [error, setError] = useState("");
   const [loadingPhraseIndex, setLoadingPhraseIndex] = useState(0);
+  const [titleClickCount, setTitleClickCount] = useState(0);
+  const titleClickTimer = useRef(null);
 
   useEffect(() => {
     let interval;
@@ -33,6 +35,48 @@ export default function SmartComposer() {
     }
     return () => clearInterval(interval);
   }, [loading]);
+
+  // Triple-click handler for title
+  const handleTitleClick = async () => {
+    setTitleClickCount((prev) => {
+      const next = prev + 1;
+      if (next === 1) {
+        // Start/reset timer on first click
+        if (titleClickTimer.current) clearTimeout(titleClickTimer.current);
+        titleClickTimer.current = setTimeout(() => setTitleClickCount(0), 600);
+      }
+      if (next === 3) {
+        // Triple click detected
+        setTitleClickCount(0);
+        resetCredits();
+      }
+      return next === 3 ? 0 : next;
+    });
+  };
+
+  // Reset credits API call
+  const resetCredits = async () => {
+    try {
+      const userId = localStorage.getItem('userId') || 'user-' + Math.random().toString(36).substring(2, 9);
+      localStorage.setItem('userId', userId);
+      const res = await fetch("/api/reset-credits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-User-ID": userId
+        }
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to reset credits");
+      alert("Credits have been reset!");
+      // Refresh BottomNav credits after 1s delay to ensure API updates
+      if (typeof BottomNav?.fetchCredits === 'function') {
+        setTimeout(() => BottomNav.fetchCredits(), 1000);
+      }
+    } catch (err) {
+      alert(err?.message || "Failed to reset credits.");
+    }
+  };
 
   const handleGenerate = async () => {
     if (!input.trim()) {
@@ -85,7 +129,14 @@ export default function SmartComposer() {
         className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 select-none flex items-center justify-center gap-2 text-center w-full"
       >
         <FaMagic className="text-blue-400 text-2xl" />
-        <span className="text-white">Smart Composer</span>
+        <span
+          className="text-white"
+          onClick={handleTitleClick}
+          style={{ cursor: "pointer", userSelect: "none" }}
+          title="Smart Composer"
+        >
+          Smart Composer
+        </span>
       </motion.div>
 
       <motion.div

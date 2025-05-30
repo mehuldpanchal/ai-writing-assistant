@@ -1,8 +1,30 @@
 import { deductCredit, checkCredits } from '../../lib/utils'
 
 export default async function handler(req, res) {
+  // Common declarations
+  const userId = req.headers['x-user-id'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress
+  const credits = checkCredits(userId)
+
+  if (req.method === 'GET') {
+    res.status(200).json({
+      creditsRemaining: credits.credits,
+      resetTime: credits.lastReset
+    })
+    return
+  }
+
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' })
+    return
+  }
+
+  // Check credits before processing POST request
+  if (credits.credits <= 0) {
+    res.status(429).json({
+      error: 'Daily credit limit reached',
+      creditsRemaining: credits.credits,
+      resetTime: credits.lastReset
+    })
     return
   }
 
@@ -13,11 +35,6 @@ export default async function handler(req, res) {
     return
   }
 
-  // Use IP as temporary user identifier
-  const userId = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-
-  // Check and deduct credit
-  const credits = checkCredits(userId)
   if (credits.credits <= 0) {
     res.status(429).json({
       error: 'Daily credit limit reached',

@@ -97,10 +97,7 @@ export function deductCredit(userId: string): boolean {
     saveCredits(creditStore);
     console.log('Deducted credit:', userId, credits.credits);
     // Notify all components of credit update
-    console.log('Dispatching creditUpdate event');
-    window.dispatchEvent(new CustomEvent('creditUpdate', {
-      detail: { userId, remaining: credits.credits }
-    }));
+    console.log('Credit deducted for user:', userId, 'Remaining:', credits.credits);
     return true;
   }
   

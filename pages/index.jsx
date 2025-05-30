@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
+import BottomNav from '../components/ui/BottomNav'
 import Button from '../components/ui/Button'
 import StyleButton from '../components/ui/StyleButton'
 import { createEditor, Node } from 'slate'
@@ -87,10 +88,32 @@ export default function Home() {
         setCorrectedText(data.correctedText)
         const corrections = findCorrections(originalText, data.correctedText)
         setCorrectedRanges(corrections)
+        // Refresh credits after 1s delay if BottomNav is available
+        try {
+          if (typeof BottomNav?.fetchCredits === 'function') {
+            setTimeout(() => BottomNav.fetchCredits(), 1000)
+          }
+        } catch (e) {
+          console.log('Could not refresh credits display:', e)
+        }
       }
     } catch (error) {
-      console.error(error)
-      alert('Failed to check spelling and grammar. Please try again.')
+      console.error(error);
+      // Only show alert if no correctedText is present
+      if (!correctedText) {
+        if (error instanceof Response) {
+          try {
+            const data = await error.json();
+            alert(data?.error || 'Failed to check spelling and grammar. Please try again.');
+          } catch {
+            alert('Failed to check spelling and grammar. Please try again.');
+          }
+        } else if (error?.message) {
+          alert(error.message);
+        } else {
+          alert('Failed to check spelling and grammar. Please try again.');
+        }
+      }
     } finally {
       setLoading(false)
     }
@@ -131,10 +154,26 @@ export default function Home() {
       const data = await res.json()
       if (data.styledText) {
         setStyledText(data.styledText)
+        // Refresh credits after 1s delay to ensure API updates
+        if (typeof BottomNav?.fetchCredits === 'function') {
+          setTimeout(() => BottomNav.fetchCredits(), 1000)
+        }
       }
     } catch (error) {
-      console.error(error)
-      alert('Failed to apply writing style. Please try again.')
+      console.error(error);
+      // Try to extract error message from the response if available
+      if (error instanceof Response) {
+        try {
+          const data = await error.json();
+          alert(data?.error || 'Failed to apply writing style. Please try again.');
+        } catch {
+          alert('Failed to apply writing style. Please try again.');
+        }
+      } else if (error?.message) {
+        alert(error.message);
+      } else {
+        alert('Failed to apply writing style. Please try again.');
+      }
     } finally {
       setLoading(false)
     }
