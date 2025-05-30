@@ -4,7 +4,7 @@ import BottomNav from '../components/ui/BottomNav'
 export default function MyApp({ Component, pageProps }) {
   return (
     <div className="min-h-screen w-full flex flex-col">
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full pb-28 sm:pb-32">
         <Component {...pageProps} />
       </main>
       <BottomNav />

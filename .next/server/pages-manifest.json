@@ -2,8 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/smart-composer": "pages/smart-composer.js",
+  "/": "pages/index.js",
   "/api/spelling-grammar": "pages/api/spelling-grammar.js",
-  "/api/reset-credits": "pages/api/reset-credits.js",
-  "/": "pages/index.js"
+  "/smart-composer": "pages/smart-composer.js"
 }

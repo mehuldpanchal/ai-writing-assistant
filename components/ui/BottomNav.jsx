@@ -62,7 +62,7 @@ export default function BottomNav() {
   BottomNav.fetchCredits = fetchCredits;
 
   return (
-    <nav className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white/10 backdrop-blur-md rounded-2xl shadow-xl inline-flex justify-center items-center gap-3 sm:gap-6 px-4 py-2 sm:px-6 sm:py-2 border border-white/20">
+    <nav className="fixed bottom-4 sm:bottom-6 left-0 right-0 mx-2 sm:left-1/2 sm:-translate-x-1/2 sm:mx-0 z-50 bg-white/10 backdrop-blur-md rounded-2xl shadow-xl flex sm:inline-flex justify-center items-center gap-3 sm:gap-6 px-4 py-2 sm:px-6 sm:py-2 border border-white/20">
       <Link href="/" passHref legacyBehavior>
         <a>
           <NavItem
@@ -87,7 +87,7 @@ export default function BottomNav() {
         </div>
         <span className="text-xs sm:text-sm font-medium">Credits</span>
         {credits.resetTime && (
-          <div className="text-xs text-blue-300 mt-0.5">
+          <div className="text-xs text-blue-300 mt-0.5 text-center">
             Resets: {new Date(credits.resetTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
           </div>
         )}
