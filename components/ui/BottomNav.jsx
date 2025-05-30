@@ -62,7 +62,7 @@ export default function BottomNav() {
   BottomNav.fetchCredits = fetchCredits;
 
   return (
-    <nav className="fixed bottom-4 sm:bottom-6 left-0 right-0 mx-2 sm:left-1/2 sm:-translate-x-1/2 sm:mx-0 z-50 bg-white/10 backdrop-blur-md rounded-2xl shadow-xl flex sm:inline-flex justify-center items-center gap-3 sm:gap-6 px-4 py-2 sm:px-6 sm:py-2 border border-white/20">
+    <nav className="fixed bottom-4 sm:bottom-6 left-0 right-0 mx-2 sm:left-1/2 sm:-translate-x-1/2 sm:max-w-fit z-50 bg-white/10 backdrop-blur-md rounded-2xl shadow-xl flex sm:inline-flex justify-center items-center gap-3 sm:gap-6 px-4 py-2 sm:px-6 sm:py-2 border border-white/20">
       <Link href="/" passHref legacyBehavior>
         <a>
           <NavItem
